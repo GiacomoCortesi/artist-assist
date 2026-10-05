@@ -1,0 +1,23 @@
+{
+	# ArtistAssist: SPA from /srv + reverse proxy API to backend.
+	# Frontend is built into static assets (frontend/dist) and served by Caddy.
+	# Tailscale is a host concern — bind/publish only on the Tailscale interface in production (see README).
+}
+
+:80 {
+	encode gzip
+
+	handle /api/* {
+		# Retry briefly while uvicorn is still binding after (re)start.
+		reverse_proxy backend:8000 {
+			lb_try_duration 10s
+			lb_try_interval 250ms
+		}
+	}
+
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}

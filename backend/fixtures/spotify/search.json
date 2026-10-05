@@ -1,0 +1,13 @@
+{
+  "artists": {
+    "items": [
+      {
+        "id": "artist_spotify_1",
+        "name": "Nova Lane",
+        "genres": ["indie pop"],
+        "followers": { "total": 125000 },
+        "images": [{ "url": "https://example.com/nova.jpg" }]
+      }
+    ]
+  }
+}

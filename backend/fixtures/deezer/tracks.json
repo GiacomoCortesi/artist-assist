@@ -1,0 +1,7 @@
+{
+  "data": [
+    { "id": 9001, "title": "Deep End", "duration": 210, "album_id": 8001 },
+    { "id": 9002, "title": "Chlorine", "duration": 198, "album_id": 8001 },
+    { "id": 9003, "title": "Glass House", "duration": 185, "album_id": 8002 }
+  ]
+}

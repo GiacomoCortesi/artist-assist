@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "id": 8001,
+      "title": "Midnight Swim",
+      "release_date": "2024-06-01",
+      "cover_medium": "https://example.com/dz-midnight.jpg"
+    },
+    {
+      "id": 8002,
+      "title": "Glass House",
+      "release_date": "2023-11-10",
+      "cover_medium": "https://example.com/dz-glass.jpg"
+    }
+  ]
+}

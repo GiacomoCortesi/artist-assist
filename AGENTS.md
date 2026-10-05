@@ -14,7 +14,7 @@ User chat instructions always override this file.
 
 It does two jobs:
 
-1. **Know the artist** — sync social platforms (Instagram, Facebook, Threads, TikTok, YouTube) and music platforms (Spotify, SoundCloud, Deezer) into SQLite, and maintain an editable, LLM-ready context of the user’s custom information (music, tone, audience, events, history).
+1. **Know the artist** — sync social platforms (Instagram, Facebook, Threads, TikTok, YouTube) and music platforms (Spotify, SoundCloud, Deezer) into SQLite, and maintain an editable, LLM-ready context of the user’s custom information (music, tone, audience, history).
 2. **Design content** — a specialized agent helps prepare and design **content in general** (posts, series, campaigns, copy, media), leveraging that context. Includes **smart autocrop / format adaptation** of the user’s media for each social format. The musician publishes **manually outside the app**.
 
 It is **not** a multi-tenant SaaS, analytics suite, or social publisher.
@@ -75,7 +75,7 @@ Browser (React/Vite) ──► Caddy ──► FastAPI
 
 - **Frontend:** React + Vite + TypeScript, Tailwind v4, shadcn/ui, Motion, Lucide, Simple Icons, Sonner, Geist via Fontsource.
 - **Backend:** Python + FastAPI; in-process scheduler (e.g. APScheduler) for **sync only**.
-- **Media pipeline:** library of originals + derived variants; smart autocrop / focal-point / face-aware when available; Pillow for deterministic resize/safe-area; OpenAI image for generate/edit on request; optional R2, default local disk.
+- **Media pipeline:** library of originals + derived variants; smart autocrop / focal-point / face-aware when available; Pillow for deterministic resize/safe-area; OpenAI image for generate/edit on request; chat via OpenAI or Anthropic (Claude); optional R2, default local disk.
 - **Deploy:** Docker Compose project name `artistassist` (`caddy`, `backend`); Tailscale on the host.
 
 Expected layout (after AA-001+):
@@ -140,4 +140,4 @@ If instructed to implement the whole application: follow **`PROMPT.md`** exactly
 
 ## Quick “what good looks like”
 
-A musician opens Home → sees connection/sync status → browses Library (music + posts + media) → edits Context → manages Events → uses Content Studio to design any content (from a single caption to a multi-post plan), adapts media to IG/TikTok/YouTube/etc. formats with smart crops, then **downloads/copies** a package and posts it themselves.
+A musician opens Home → sees connection/sync status → edits Context → uses Content Studio to design any content (from a single caption to a multi-post plan), adapts media to IG/TikTok/YouTube/etc. formats with smart crops, then **downloads/copies** a package and posts it themselves.

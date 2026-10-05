@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "id": "alb_midnight",
+      "name": "Midnight Swim",
+      "release_date": "2024-06-01",
+      "album_type": "album",
+      "images": [{ "url": "https://example.com/midnight.jpg" }]
+    },
+    {
+      "id": "alb_single",
+      "name": "Glass House",
+      "release_date": "2023-11-10",
+      "album_type": "single",
+      "images": [{ "url": "https://example.com/glass.jpg" }]
+    }
+  ]
+}

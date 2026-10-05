@@ -14,7 +14,7 @@ Build **ArtistAssist** (tagline: "Your social media assistant"): a private, sing
 **In scope**
 
 1. **Information retrieval** — sync social + music data into SQLite and expose a complete, meaningful artist library + LLM-ready context (the user’s custom information).
-2. **Content agent** — help **design and prepare content in general** (single posts, series, campaigns, captions, hashtags, media adaptations), always grounded on the synced artist data, context docs, events, releases, and tone of voice. Does **not** publish to platforms.
+2. **Content agent** — help **design and prepare content in general** (single posts, series, campaigns, captions, hashtags, media adaptations), always grounded on the synced artist data, context docs, releases, and tone of voice. Does **not** publish to platforms.
 
 **Out of scope (never implement)**
 
@@ -53,16 +53,16 @@ Respect `depends_on`. Where independent, you may parallelize:
 | 2 Parallel | AA-002 \|\| AA-003 | Brand + data layer |
 | 3 Interface | AA-004 | Adapter contract |
 | 4 Parallel clients | AA-005 \|\| AA-006 \|\| AA-007 | Music + Meta + TikTok/YouTube |
-| 5 Pipeline | AA-008 → AA-009 → AA-010 | Sync → context → events |
+| 5 Pipeline | AA-008 → AA-009 | Sync → context |
 | 6 UI | AA-011 \|\| AA-012 | Home/Settings + Library/Context |
 | 7 Agent | AA-013 → AA-014 | Content agent backend then Studio UI |
 | 8 Ship | AA-015 | Hardening, fixtures, README |
 
-Done when **all AA-001…AA-015** are `status: done`, tests pass offline, and README walkthrough works with fixtures.
+Done when **all tickets AA-001…AA-015 (AA-010 removed)** are `status: done`, tests pass offline, and README walkthrough works with fixtures.
 
 ### Definition of “MVP complete”
 
-- [ ] All 15 tickets `done` with criteria checked
+- [ ] All tickets `done` with criteria checked
 - [ ] `make test`, `make lint`, `make build` succeed without live platform/OpenAI keys
 - [ ] App boots via Docker Compose / Makefile; Home loads
 - [ ] Grep audit: no prometheus metrics pipeline, no MusicBrainz/Last.fm clients, no publish/schedule APIs
@@ -92,8 +92,8 @@ While implementing:
 
 - Frontend: React + Vite + TypeScript, Tailwind CSS v4, shadcn/ui, Motion, Lucide, Simple Icons, Sonner, Geist Sans/Mono (Fontsource).
 - Backend: Python + FastAPI.
-- Storage: SQLite (posts, comments, media library, music, tags, drafts, content plans, events, context, encrypted tokens, sync jobs).
-- LLM: OpenAI API + OpenAI Agents SDK; chat and image models configurable in `.env`.
+- Storage: SQLite (posts, comments, media library, music, tags, drafts, content plans, context, encrypted tokens, sync jobs).
+- LLM: OpenAI or Anthropic (Claude) for chat via `LLM_PROVIDER` in `.env`; OpenAI image model for generate/edit when the user asks.
 - Media: Pillow (and optional smart-crop helpers) for **autocrop / resize / safe-area adaptations** across platform formats; OpenAI image model for generate/edit when the user asks. Optional Cloudflare R2; default local disk for assets.
 - Scheduler: in-process (e.g. APScheduler) for **data sync only**.
 - Packaging: Docker Compose (`caddy`, `backend`), Makefile. Tailscale on host.
@@ -131,19 +131,15 @@ Daily + manual refresh. Tag untagged posts (taxonomy) and comments (sentiment/th
 
 ### Context (AA-009)
 
-Markdown + YAML front matter: `artist_profile.md`, `platform_<name>.md`, `events.md`. Section locks. Events never invent truth. Keep `artist_profile.md` compact enough for reliable agent grounding (target ~≤2,000 tokens for the core profile).
-
-### Events (AA-010)
-
-Manual CRUD; LLM suggestions accept/dismiss only.
+Markdown + YAML front matter: `artist_profile.md`, `platform_<name>.md`. Section locks. Keep `artist_profile.md` compact enough for reliable agent grounding (target ~≤2,000 tokens for the core profile).
 
 ### Content agent & media (AA-013 / AA-014)
 
-The Content Studio agent is a **general content co-designer**, not a campaign-only wizard. It must leverage **all** user custom information: artist context docs, synced posts/comments, music catalog, events, tone of voice, goals, and the **media library**.
+The Content Studio agent is a **general content co-designer**, not a campaign-only wizard. It must leverage **all** user custom information: artist context docs, synced posts/comments, music catalog, tone of voice, goals, and the **media library**.
 
 Capabilities (non-exhaustive):
 
-- Ideate and draft any content: single post, carousel, story/reel concept, thread, YouTube description, promo for a release/event, or a multi-post plan when useful.
+- Ideate and draft any content: single post, carousel, story/reel concept, thread, YouTube description, promo for a release, or a multi-post plan when useful.
 - Write/adapt copy and hashtags per platform in the artist’s voice.
 - **Manage user media:** upload/import, browse library (including synced post media where available), attach assets to drafts.
 - **Smart format adaptation:** from an original image (or generated/edited master), produce platform-ready variants with smart autocrop / focal-point / face-aware crop when possible, plus deterministic Pillow resize. Support at least: feed 4:5, square 1:1, story/reel 9:16, landscape 16:9 (YouTube/Facebook), and document per-platform safe margins where relevant.
@@ -158,7 +154,6 @@ Constraints: ground on real context; never invent dates/links/metrics; never cla
 | --- | --- |
 | Home, Settings | AA-011 |
 | Artist library, Context | AA-012 |
-| Events | AA-010 |
 | Content Studio | AA-014 (UI) + AA-013 (agent + media pipeline) |
 | Styleguide | AA-002 |
 
@@ -181,7 +176,6 @@ Compose project `artistassist`; Makefile; README with OAuth setup, fixture mode,
 | AA-007 | `tickets/AA-007-social-clients-tiktok-youtube.md` | TikTok, YouTube |
 | AA-008 | `tickets/AA-008-sync-orchestration.md` | Scheduler, tagging, status APIs |
 | AA-009 | `tickets/AA-009-artist-context.md` | Context markdown generation |
-| AA-010 | `tickets/AA-010-events.md` | Events CRUD + suggestions |
 | AA-011 | `tickets/AA-011-settings-home.md` | Settings + Home |
 | AA-012 | `tickets/AA-012-library-context-ui.md` | Library + Context UI |
 | AA-013 | `tickets/AA-013-content-studio-agent.md` | Content agent + smart media adaptations |
